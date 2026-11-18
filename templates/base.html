@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Kamustuffs{% endblock %}</title>
+  <style>
+    :root {
+      --maroon: #6d1a2b;
+      --maroon-dark: #4a0f1c;
+      --maroon-light: #8c2a3f;
+      --gold: #d4a62a;
+      --gold-light: #f1d98a;
+      --cream: #fbf6ec;
+      --ink: #2b1a1d;
+      --muted: #7a6a6c;
+      --error: #a3162a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink); background: var(--cream);
+    }
+    h1, h2, .brand { font-family: Georgia, "Times New Roman", serif; }
+
+    /* Navbar */
+    .navbar {
+      background: var(--maroon-dark); border-bottom: 3px solid var(--gold);
+      padding: 14px 32px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand { color: var(--gold); font-size: 1.5rem; font-weight: bold; text-decoration: none; letter-spacing: .5px; }
+    .nav-links { display: flex; align-items: center; gap: 18px; color: var(--gold-light); }
+    .nav-links a, .nav-links button {
+      color: #fff; background: none; border: 0; font: inherit; cursor: pointer;
+      text-decoration: none; padding: 6px 2px; border-bottom: 2px solid transparent;
+    }
+    .nav-links a:hover, .nav-links button:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .nav-links form { margin: 0; }
+
+    /* Page layout */
+    .page { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 16px; }
+    .card {
+      width: 100%; max-width: 460px; background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(74, 15, 28, .18);
+    }
+    .card-header {
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+      color: #fff; padding: 26px 32px; border-bottom: 4px solid var(--gold);
+    }
+    .card-header h2 { margin: 0 0 4px; font-size: 1.7rem; color: var(--gold-light); }
+    .card-header p { margin: 0; color: #f0dcdf; font-size: .95rem; }
+    .card-body { padding: 24px 32px 28px; }
+
+    /* Forms */
+    label { display: block; margin: 16px 0 5px; font-weight: 600; font-size: .9rem; color: var(--maroon); }
+    input[type=text], input[type=email], input[type=password] {
+      width: 100%; padding: 10px 12px; font-size: 1rem; color: var(--ink);
+      border: 1.5px solid #dccfd1; border-radius: 6px; background: #fffdf9;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212, 166, 42, .3); }
+    .helptext, .helptext ul { color: var(--muted); font-size: .78rem; margin: 5px 0 0; padding-left: 0; list-style: none; }
+    .errorlist { color: var(--error); list-style: none; padding: 0; margin: 5px 0 0; font-size: .85rem; }
+    .row { display: flex; gap: 12px; }
+    .row > div { flex: 1; }
+
+    .btn {
+      width: 100%; margin-top: 24px; padding: 12px; font-size: 1rem; font-weight: 700; letter-spacing: .5px;
+      color: var(--maroon-dark); background: var(--gold); border: 0; border-radius: 6px; cursor: pointer;
+      transition: background .15s, transform .05s;
+    }
+    .btn:hover { background: var(--gold-light); }
+    .btn:active { transform: translateY(1px); }
+    .alt { text-align: center; margin: 20px 0 0; font-size: .92rem; color: var(--muted); }
+    .alt a, .card a { color: var(--maroon); font-weight: 600; }
+    .alt a:hover { color: var(--gold); }
+
+    .msg {
+      padding: 12px 14px; border-radius: 6px; margin-bottom: 4px; font-size: .92rem;
+      background: #fbf1d3; color: var(--maroon-dark); border-left: 4px solid var(--gold);
+    }
+    .alert-error { background: #fbe4e7; border-left-color: var(--error); color: var(--error); }
+
+    .welcome { padding: 8px 0; }
+    .welcome .badge {
+      display: inline-block; background: var(--maroon); color: var(--gold-light);
+      padding: 4px 12px; border-radius: 999px; font-size: .8rem; margin-bottom: 8px;
+    }
+    footer { text-align: center; padding: 16px; font-size: .8rem; color: var(--muted); }
+    footer span { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="{% url 'dashboard:home' %}">Kamustuffs</a>
+    <nav class="nav-links">
+      {% if user.is_authenticated %}
+        <span>{{ user.get_full_name|default:user.username }}</span>
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}<button type="submit">Log out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'accounts:login' %}">Log in</a>
+        <a href="{% url 'accounts:register' %}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+   <div class="page">
+    <main class="card">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <footer>&copy; Kamustuffs <span>&#9670;</span> All rights reserved</footer>
+</body>
+</html>

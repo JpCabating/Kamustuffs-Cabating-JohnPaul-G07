@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Register | Kamustuffs{% endblock %}
+{% block content %}
+  <div class="card-header">
+    <h2>Create your account</h2>
+    <p>Join Kamustuffs in just a minute.</p>
+  </div>
+  <div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="msg alert-error">{{ form.non_field_errors }}</div>{% endif %}
+
+      <div class="row">
+        <div>
+          <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+          {{ form.first_name }}{{ form.first_name.errors }}
+        </div>
+        <div>
+          <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+          {{ form.last_name }}{{ form.last_name.errors }}
+        </div>
+      </div>
+
+      {% for field in form %}
+        {% if field.name != "first_name" and field.name != "last_name" %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="helptext">{{ field.help_text|safe }}</div>{% endif %}
+          {{ field.errors }}
+        {% endif %}
+      {% endfor %}
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+    <p class="alt">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
+  </div>
+{% endblock %}

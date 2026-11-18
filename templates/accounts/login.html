@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Log in | Kamustuffs{% endblock %}
+{% block content %}
+  <div class="card-header">
+    <h2>Welcome back</h2>
+    <p>Log in to continue to Kamustuffs.</p>
+  </div>
+  <div class="card-body">
+    {% for message in messages %}<div class="msg">{{ message }}</div>{% endfor %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="msg alert-error">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}{{ field.errors }}
+      {% endfor %}
+      <button type="submit" class="btn">Log in</button>
+    </form>
+    <p class="alt">No account yet? <a href="{% url 'accounts:register' %}">Register</a></p>
+  </div>
+{% endblock %}

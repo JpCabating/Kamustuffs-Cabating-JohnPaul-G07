@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Kamustuffs{% endblock %}
+{% block content %}
+  <div class="card-header">
+    <h2>Dashboard</h2>
+    <p>Your Kamustuffs workspace</p>
+  </div>
+  <div class="card-body welcome">
+    <span class="badge">Logged in</span>
+    <h2 style="color: var(--maroon); margin: 4px 0 8px;">Welcome, {{ user.first_name|default:user.username }}!</h2>
+    <p>Your account is ready. Your records and reports will appear here.</p>
+  </div>
+{% endblock %}
